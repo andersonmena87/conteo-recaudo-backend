@@ -4,16 +4,16 @@ namespace conteo_recaudo_backend.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class RecaudoController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<RecaudoController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public RecaudoController(ILogger<RecaudoController> logger)
         {
             _logger = logger;
         }
