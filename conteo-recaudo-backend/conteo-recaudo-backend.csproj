@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>ConteoRecaudo</RootNamespace>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>APIConteoRecaudo.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

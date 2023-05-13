@@ -7,6 +7,6 @@ namespace conteo_recaudo_backend.DAL
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<RecaudoEntity> Recaudo { get; set; }
+        public DbSet<RecaudoEntity> Recaudos { get; set; }
     }
 }

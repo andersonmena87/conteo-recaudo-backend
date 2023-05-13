@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>conteo-recaudo-backend</name>
+    </assembly>
+    <members>
+        <member name="M:conteo_recaudo_backend.Controllers.RecaudoController.Get">
+            <summary>
+             Obtiene el listado de recaudos
+            </summary>
+            <returns></returns>
+            <response code="200">Operación finalizada exitosamente.</response>
+            <response code="404">No encontró recaudos</response>
+        </member>
+    </members>
+</doc>
