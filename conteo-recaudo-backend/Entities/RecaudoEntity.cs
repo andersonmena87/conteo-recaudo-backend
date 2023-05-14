@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace conteo_recaudo_backend.Entities
+namespace ConteoRecaudo.Entities
 {
     public class RecaudoEntity
     {

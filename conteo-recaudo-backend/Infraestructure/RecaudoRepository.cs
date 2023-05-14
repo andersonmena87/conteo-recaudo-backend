@@ -1,5 +1,5 @@
-﻿using conteo_recaudo_backend.DAL;
-using conteo_recaudo_backend.Entities;
+﻿using ConteoRecaudo.DAL;
+using ConteoRecaudo.Entities;
 using ConteoRecaudo.Infraestructure.Interfaces;
 using ConteoRecaudo.Models;
 using Microsoft.EntityFrameworkCore;
@@ -14,21 +14,11 @@ namespace ConteoRecaudo.Infraestructure
             _context = appDbContext;
         }
 
-        public async Task<int> GuardarRecaudo(RecaudoModel recaudo) {
+        public async Task<int> GuardarRecaudo(RecaudoEntity recaudo) {
             try {
-                RecaudoEntity nuevoRecaudo = new RecaudoEntity {
-                    Estacion = recaudo.Estacion,
-                    Sentido = recaudo.Sentido,
-                    Hora = recaudo.Hora,
-                    Categoria = recaudo.Categoria,
-                    ValorTabulado = recaudo.ValorTabulado,
-                    Cantidad = recaudo.Cantidad,
-                    FechaRecaudo =  recaudo.FechaRecaudo
-                };
-
-                _context.Add(nuevoRecaudo);
+                _context.Add(recaudo);
                 await _context.SaveChangesAsync();
-                return nuevoRecaudo.Id;
+                return recaudo.Id;
             } catch (Exception ex)
             {
                 throw new Exception(ex.Message);

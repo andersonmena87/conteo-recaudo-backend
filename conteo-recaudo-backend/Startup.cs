@@ -1,11 +1,12 @@
-﻿using conteo_recaudo_backend.DAL;
-using ConteoRecaudo.BLL;
+﻿using ConteoRecaudo.BLL;
 using ConteoRecaudo.BLL.Interfaces;
+using ConteoRecaudo.DAL;
 using ConteoRecaudo.Infraestructure;
 using ConteoRecaudo.Infraestructure.Interfaces;
+using ConteoRecaudo.Services;
+using ConteoRecaudo.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
 
 namespace ConteoRecaudo
 {
@@ -39,6 +40,7 @@ namespace ConteoRecaudo
             #region Scopeds
             services.AddScoped<IRecaudoRepository, RecaudoRepository>();
             services.AddScoped<IRecaudoBL, RecaudoBL>();
+            services.AddScoped<IConteoApi, ConteoApi>();
             #endregion
         }
 

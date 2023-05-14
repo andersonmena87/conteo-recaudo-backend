@@ -1,7 +1,7 @@
-﻿using conteo_recaudo_backend.Entities;
+﻿using ConteoRecaudo.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace conteo_recaudo_backend.DAL
+namespace ConteoRecaudo.DAL
 {
     public class AppDbContext : DbContext
     {

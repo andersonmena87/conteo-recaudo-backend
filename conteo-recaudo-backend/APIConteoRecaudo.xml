@@ -4,10 +4,21 @@
         <name>conteo-recaudo-backend</name>
     </assembly>
     <members>
-        <member name="M:conteo_recaudo_backend.Controllers.RecaudoController.Get">
+        <member name="M:ConteoRecaudo.Controllers.RecaudoController.Get">
             <summary>
              Obtiene el listado de recaudos
             </summary>
+            <returns></returns>
+            <response code="200">Operación finalizada exitosamente.</response>
+            <response code="404">No encontró recaudos</response>
+        </member>
+        <member name="M:ConteoRecaudo.Controllers.RecaudoController.Post(System.String,System.DateTime,System.DateTime)">
+            <summary>
+             Guardar recaudos
+            </summary>
+            <param name="token">fecha inicial para la consulta</param>
+            <param name="fechaInicio">fecha  final para la consulta</param>
+            <param name="fechaFin">Maquina que registró el error</param>
             <returns></returns>
             <response code="200">Operación finalizada exitosamente.</response>
             <response code="404">No encontró recaudos</response>

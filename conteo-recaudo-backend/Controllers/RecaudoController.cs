@@ -1,8 +1,10 @@
+using ConteoRecaudo.BLL;
 using ConteoRecaudo.BLL.Interfaces;
 using ConteoRecaudo.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 
-namespace conteo_recaudo_backend.Controllers
+namespace ConteoRecaudo.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -35,6 +37,25 @@ namespace conteo_recaudo_backend.Controllers
             }
 
             return Ok(recaudos);
+
+        }
+
+        /// <summary>
+        ///  Guardar recaudos
+        /// </summary>
+        /// <param name="token">fecha inicial para la consulta</param>
+        /// <param name="fechaInicio">fecha  final para la consulta</param>
+        /// <param name="fechaFin">Maquina que registró el error</param>
+        /// <returns></returns>
+        /// <response code="200">Operación finalizada exitosamente.</response>
+        /// <response code="404">No encontró recaudos</response>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<bool>> Post(string token, DateTime fechaIncio, DateTime fechaFin )
+        {
+            bool respuesta = await _recaudoBL.GuardarRecaudos(token, fechaIncio, fechaFin);
+            return Ok();
 
         }
     }
