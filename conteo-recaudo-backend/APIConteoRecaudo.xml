@@ -14,14 +14,14 @@
         </member>
         <member name="M:ConteoRecaudo.Controllers.RecaudoController.Post(System.String,System.DateTime,System.DateTime)">
             <summary>
-             Guardar recaudos
+             Guardar recaudos en base de datos
             </summary>
-            <param name="token">fecha inicial para la consulta</param>
-            <param name="fechaInicio">fecha  final para la consulta</param>
-            <param name="fechaFin">Maquina que registró el error</param>
+            <param name="token">Token</param>
+            <param name="fechaInicio">Fecha inicio para la consulta formato(YYYY-MM-DD)</param>
+            <param name="fechaFin">Fecha fin para la consulta formato(YYYY-MM-DD)</param>
             <returns></returns>
             <response code="200">Operación finalizada exitosamente.</response>
-            <response code="404">No encontró recaudos</response>
+            <response code="500">Error al guardar recaudos en base de datos</response>
         </member>
     </members>
 </doc>

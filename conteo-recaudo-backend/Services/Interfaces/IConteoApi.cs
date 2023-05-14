@@ -4,6 +4,6 @@ namespace ConteoRecaudo.Services.Interfaces
 {
     public interface IConteoApi
     {
-        Task<List<RecaudoModel>> GetConteos(string token, string fecha);
+        Task<List<ConteoModel>> GetConteos(string token, string fecha);
     }
 }

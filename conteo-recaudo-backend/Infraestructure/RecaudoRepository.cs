@@ -25,12 +25,12 @@ namespace ConteoRecaudo.Infraestructure
             }
         }
 
-        public async Task<List<RecaudoModel>> GetRecaudos()
+        public async Task<List<ConteoRecaudoModel>> GetRecaudos()
         {
             try
             {
-                List<RecaudoModel> recaudos = await (from recaudo in _context.Recaudos
-                                            select new RecaudoModel
+                List<ConteoRecaudoModel> recaudos = await (from recaudo in _context.Recaudos
+                                            select new ConteoRecaudoModel
                                             {
                                                 Id = recaudo.Id,
                                                 Estacion = recaudo.Estacion,

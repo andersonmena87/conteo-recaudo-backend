@@ -6,7 +6,7 @@ namespace ConteoRecaudo.Helpers.Converts
 {
     public class ConvertRecaudo
     {
-        public static RecaudoModel ToModel(RecaudoEntity recaudo) {
+        public static ConteoRecaudoModel ToModel(RecaudoEntity recaudo) {
             return new()
             {
                 Id = recaudo.Id,
@@ -20,7 +20,7 @@ namespace ConteoRecaudo.Helpers.Converts
             };
         }
 
-        public static RecaudoEntity ToEntity(RecaudoModel recaudo)
+        public static RecaudoEntity ToEntity(ConteoRecaudoModel recaudo)
         {
             return new()
             {

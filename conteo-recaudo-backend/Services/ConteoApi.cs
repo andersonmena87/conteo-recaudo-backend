@@ -11,11 +11,11 @@ namespace ConteoRecaudo.Services
      
         }
 
-        public async Task<List<RecaudoModel>> GetConteos(string token, string fecha)
+        public async Task<List<ConteoModel>> GetConteos(string token, string fecha)
         {
             string url = ObtenerUrlApi("ConteoApi") + fecha;
             return await HttpClientHelper
-                .GetAsync<List<RecaudoModel>>(token, url);
+                .GetAsync<List<ConteoModel>>(token, url);
         }
     }
 }

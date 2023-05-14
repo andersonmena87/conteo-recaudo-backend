@@ -1,8 +1,7 @@
 ﻿namespace ConteoRecaudo.Models
 {
-    public class RecaudoModel
+    public class ConteoModel
     {
-
         public string? Estacion { get; set; }
 
         public string? Sentido { get; set; }
@@ -11,7 +10,6 @@
 
         public string? Categoria { get; set; }
 
-        public int ValorTabulado { get; set; }
-
+        public int Cantidad { get; set; }
     }
 }

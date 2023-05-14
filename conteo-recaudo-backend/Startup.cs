@@ -41,6 +41,7 @@ namespace ConteoRecaudo
             services.AddScoped<IRecaudoRepository, RecaudoRepository>();
             services.AddScoped<IRecaudoBL, RecaudoBL>();
             services.AddScoped<IConteoApi, ConteoApi>();
+            services.AddScoped<IRecaudoApi, RecaudoApi>();
             #endregion
         }
 

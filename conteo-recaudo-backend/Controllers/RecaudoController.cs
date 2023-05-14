@@ -1,8 +1,6 @@
-using ConteoRecaudo.BLL;
 using ConteoRecaudo.BLL.Interfaces;
 using ConteoRecaudo.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Primitives;
 
 namespace ConteoRecaudo.Controllers
 {
@@ -28,9 +26,9 @@ namespace ConteoRecaudo.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<List<RecaudoModel>>> Get()
+        public async Task<ActionResult<List<ConteoRecaudoModel>>> Get()
         {
-            List<RecaudoModel> recaudos = await _recaudoBL.GetRecaudos();
+            List<ConteoRecaudoModel> recaudos = await _recaudoBL.GetRecaudos();
 
             if (recaudos.Count == 0) {
                 return NotFound();
@@ -41,22 +39,26 @@ namespace ConteoRecaudo.Controllers
         }
 
         /// <summary>
-        ///  Guardar recaudos
+        ///  Guardar recaudos en base de datos
         /// </summary>
-        /// <param name="token">fecha inicial para la consulta</param>
-        /// <param name="fechaInicio">fecha  final para la consulta</param>
-        /// <param name="fechaFin">Maquina que registró el error</param>
+        /// <param name="token">Token</param>
+        /// <param name="fechaInicio">Fecha inicio para la consulta formato(YYYY-MM-DD)</param>
+        /// <param name="fechaFin">Fecha fin para la consulta formato(YYYY-MM-DD)</param>
         /// <returns></returns>
         /// <response code="200">Operación finalizada exitosamente.</response>
-        /// <response code="404">No encontró recaudos</response>
+        /// <response code="500">Error al guardar recaudos en base de datos</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<bool>> Post(string token, DateTime fechaIncio, DateTime fechaFin )
+        public async Task<ActionResult<bool>> Post(string token, DateTime fechaInicio, DateTime fechaFin)
         {
-            bool respuesta = await _recaudoBL.GuardarRecaudos(token, fechaIncio, fechaFin);
+            bool respuesta = await _recaudoBL.GuardarRecaudos(token, fechaInicio, fechaFin);
+            if (!respuesta)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
             return Ok();
-
         }
+
     }
 }
