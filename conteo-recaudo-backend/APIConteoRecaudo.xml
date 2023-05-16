@@ -23,5 +23,49 @@
             <response code="200">Operación finalizada exitosamente.</response>
             <response code="500">Error al guardar recaudos en base de datos</response>
         </member>
+        <member name="M:ConteoRecaudo.Controllers.RecaudoController.ExportarExcel(System.DateTime,System.DateTime)">
+            <summary>
+            Consulta un listado de recaudos por fecha y retorna el resultado de la consulta como arreglo de bytes en formato de excel
+            </summary>
+            <param name="fechaInicial">fecha inicial de la consulta</param>
+            <param name="fechaFinal">fecha final de la consulta</param>
+            <returns>Objeto con el arreglo de bytes y nombre del archivo.</returns>
+        </member>
+        <member name="T:ConteoRecaudo.Properties.Resources">
+            <summary>
+              Clase de recurso fuertemente tipado, para buscar cadenas traducidas, etc.
+            </summary>
+        </member>
+        <member name="P:ConteoRecaudo.Properties.Resources.ResourceManager">
+            <summary>
+              Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
+            </summary>
+        </member>
+        <member name="P:ConteoRecaudo.Properties.Resources.Culture">
+            <summary>
+              Reemplaza la propiedad CurrentUICulture del subproceso actual para todas las
+              búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
+            </summary>
+        </member>
+        <member name="P:ConteoRecaudo.Properties.Resources.ErrorArchivo">
+            <summary>
+              Busca una cadena traducida similar a No se pudó leer el archivo {0}, por favor valide e intente nuevamente..
+            </summary>
+        </member>
+        <member name="P:ConteoRecaudo.Properties.Resources.ErrorExtensionArchivo">
+            <summary>
+              Busca una cadena traducida similar a No se pudo obtener la extensión para el archivo de configuración..
+            </summary>
+        </member>
+        <member name="P:ConteoRecaudo.Properties.Resources.ErrorNombreArchivo">
+            <summary>
+              Busca una cadena traducida similar a No se pudo obtener el nombre para el archivo de configuración..
+            </summary>
+        </member>
+        <member name="P:ConteoRecaudo.Properties.Resources.ErrorRutaTemporales">
+            <summary>
+              Busca una cadena traducida similar a No se logró obtener la ruta de archivo temporales en el config. Por favor valide el archivo de configuración..
+            </summary>
+        </member>
     </members>
 </doc>

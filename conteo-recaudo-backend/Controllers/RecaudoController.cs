@@ -60,5 +60,19 @@ namespace ConteoRecaudo.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Consulta un listado de recaudos por fecha y retorna el resultado de la consulta como arreglo de bytes en formato de excel
+        /// </summary>
+        /// <param name="fechaInicial">fecha inicial de la consulta</param>
+        /// <param name="fechaFinal">fecha final de la consulta</param>
+        /// <returns>Objeto con el arreglo de bytes y nombre del archivo.</returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpGet("GetBytesRecaudoExcel")]
+        public async Task<ArchivoRecaudoExcel> ExportarExcel(DateTime fechaInicial, DateTime fechaFinal)
+        {
+            return await _recaudoBL.ExportarExcel(fechaInicial, fechaFinal);
+        }
     }
 }

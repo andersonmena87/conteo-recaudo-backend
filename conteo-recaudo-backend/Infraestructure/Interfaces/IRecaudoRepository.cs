@@ -7,5 +7,6 @@ namespace ConteoRecaudo.Infraestructure.Interfaces
     {
         Task<int> GuardarRecaudo(RecaudoEntity recaudo);
         Task<List<ConteoRecaudoModel>> GetRecaudos();
+        Task<List<ReporteRecaudoExcel>> ObtenerRecaudosxFechas(DateTime fechaInicial, DateTime fechaFinal);
     }
 }

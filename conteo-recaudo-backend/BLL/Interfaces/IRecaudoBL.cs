@@ -7,5 +7,7 @@ namespace ConteoRecaudo.BLL.Interfaces
         Task<List<ConteoRecaudoModel>> GetRecaudos();
 
         Task<bool> GuardarRecaudos(string token, DateTime fechaIncio, DateTime fechaFin);
+
+        Task<ArchivoRecaudoExcel> ExportarExcel(DateTime fechaInicial, DateTime fechaFinal);
     }
 }
