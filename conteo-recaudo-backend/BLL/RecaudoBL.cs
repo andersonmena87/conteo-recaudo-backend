@@ -208,8 +208,7 @@ namespace ConteoRecaudo.BLL
 
                 // Calcular y escribir las sumatorias
                 columnIndex = 2;
-                rowIndex++;
-
+                
                 worksheet.Cells[rowIndex, 1].Value = "Total";
 
                 foreach (DataColumn column in dataTable.Columns.Cast<DataColumn>().Skip(1))
@@ -230,7 +229,7 @@ namespace ConteoRecaudo.BLL
                 }
 
                 // Calcular y escribir las sumatorias
-                rowIndex++;
+                rowIndex+=2;
 
                 // Filas de totales
                 worksheet.Cells[rowIndex, 1].Value = "Totales";
@@ -285,6 +284,39 @@ namespace ConteoRecaudo.BLL
                 worksheet.Cells.Style.Font.Name = "Arial";
                 worksheet.Cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+                // Obtener el rango de la tabla
+                ExcelRange tableRange = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
+
+                // Obtener las filas que contienen datos
+                IEnumerable<ExcelRangeBase> dataRows = tableRange
+                    .Where(cell => cell.Value != null && !string.IsNullOrWhiteSpace(cell.Value.ToString()))
+                    .Select(cell => cell.Start.Row)
+                    .Distinct()
+                    .Select(row => worksheet.Cells[row, 1, row, worksheet.Dimension.End.Column]);
+
+                // Aplicar bordes adicionales a las filas con datos
+                foreach (ExcelRangeBase row in dataRows)
+                {
+                    row.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    row.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    row.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    row.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                }
+
+                // Aplicar bordes a la primera fila
+                ExcelRange headerRow = worksheet.Cells[1, 1, 1, worksheet.Dimension.End.Column];
+                headerRow.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+
+                int lastRow = worksheet.Dimension.End.Row;
+                int lastColumn = worksheet.Dimension.End.Column;
+
+                // Quitar los bordes de las últimas dos filas desde la columna 3 en adelante
+                ExcelRangeBase rangeToRemoveBorders = worksheet.Cells[lastRow - 1, 3, lastRow, lastColumn];
+                rangeToRemoveBorders.Style.Border.Top.Style = ExcelBorderStyle.None;
+                rangeToRemoveBorders.Style.Border.Bottom.Style = ExcelBorderStyle.None;
+                rangeToRemoveBorders.Style.Border.Left.Style = ExcelBorderStyle.None;
+                rangeToRemoveBorders.Style.Border.Right.Style = ExcelBorderStyle.None;
 
                 // Guardar el archivo Excel
                 package.Save();
