@@ -30,7 +30,7 @@ namespace ConteoRecaudo.BLL
 
         public async Task<ResponseReacudoModel> GetRecaudos(int pagina)
         {
-            int registrosPorPagina = 100;
+            int registrosPorPagina = 10;
             return await _recuadoRepository.GetRecaudos(pagina, registrosPorPagina);
         }
         
