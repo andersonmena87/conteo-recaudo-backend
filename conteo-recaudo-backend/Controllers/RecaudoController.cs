@@ -18,23 +18,24 @@ namespace ConteoRecaudo.Controllers
         }
 
         /// <summary>
-        ///  Obtiene el listado de recaudos
+        ///  Obtiene el listado de recaudos por página
         /// </summary>
+        /// <param name="pagina">Página a consultar</param>
         /// <returns></returns>
         /// <response code="200">Operación finalizada exitosamente.</response>
         /// <response code="404">No encontró recaudos</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<List<ConteoRecaudoModel>>> Get()
+        public async Task<ActionResult<ResponseReacudoModel>> Get(int pagina = 1)
         {
-            List<ConteoRecaudoModel> recaudos = await _recaudoBL.GetRecaudos();
+            ResponseReacudoModel response = await _recaudoBL.GetRecaudos(pagina);
 
-            if (recaudos.Count == 0) {
+            if (response?.ConteoRecaudoList?.Count == 0) {
                 return NotFound();
             }
 
-            return Ok(recaudos);
+            return Ok(response);
 
         }
 

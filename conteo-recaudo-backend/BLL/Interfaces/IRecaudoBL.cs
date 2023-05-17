@@ -4,7 +4,7 @@ namespace ConteoRecaudo.BLL.Interfaces
 {
     public interface IRecaudoBL
     {
-        Task<List<ConteoRecaudoModel>> GetRecaudos();
+        Task<ResponseReacudoModel> GetRecaudos(int pagina);
 
         Task<bool> GuardarRecaudos(string token, DateTime fechaIncio, DateTime fechaFin);
 

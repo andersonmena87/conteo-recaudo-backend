@@ -6,7 +6,7 @@ namespace ConteoRecaudo.Infraestructure.Interfaces
     public interface IRecaudoRepository
     {
         Task<int> GuardarRecaudo(RecaudoEntity recaudo);
-        Task<List<ConteoRecaudoModel>> GetRecaudos();
+        Task<ResponseReacudoModel> GetRecaudos(int pagina, int cantidadRegistros);
         Task<List<ReporteRecaudoExcel>> ObtenerRecaudosxFechas(DateTime fechaInicial, DateTime fechaFinal);
     }
 }

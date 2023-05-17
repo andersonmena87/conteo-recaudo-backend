@@ -1,5 +1,6 @@
 ﻿using ConteoRecaudo.DAL;
 using ConteoRecaudo.Entities;
+using ConteoRecaudo.Helpers.Converts;
 using ConteoRecaudo.Infraestructure.Interfaces;
 using ConteoRecaudo.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,38 +11,54 @@ namespace ConteoRecaudo.Infraestructure
     {
         private readonly AppDbContext _context;
 
-        public RecaudoRepository(AppDbContext appDbContext) { 
+        public RecaudoRepository(AppDbContext appDbContext)
+        {
             _context = appDbContext;
         }
 
-        public async Task<int> GuardarRecaudo(RecaudoEntity recaudo) {
-            try {
+        public async Task<int> GuardarRecaudo(RecaudoEntity recaudo)
+        {
+            try
+            {
                 _context.Add(recaudo);
                 await _context.SaveChangesAsync();
                 return recaudo.Id;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
 
-        public async Task<List<ConteoRecaudoModel>> GetRecaudos()
+        public async Task<ResponseReacudoModel> GetRecaudos(int pagina = 1, int cantidadRegistros = 100)
         {
             try
             {
-                List<ConteoRecaudoModel> recaudos = await (from recaudo in _context.Recaudos
-                                            select new ConteoRecaudoModel
-                                            {
-                                                Id = recaudo.Id,
-                                                Estacion = recaudo.Estacion,
-                                                Sentido = recaudo.Sentido,
-                                                Hora = recaudo.Hora,
-                                                Categoria = recaudo.Categoria,
-                                                ValorTabulado = recaudo.ValorTabulado,
-                                                Cantidad = recaudo.Cantidad,
-                                                FechaRecaudo = recaudo.FechaRecaudo
-                                            }).OrderBy(n => n.FechaRecaudo).ToListAsync();
-                return recaudos;
+                ResponseReacudoModel model = new();
+                model.PaginaActual = pagina;
+
+                var recaudos = from r in _context.Recaudos
+                               select r;
+
+                model.TotalRegistros = recaudos.Count();
+                model.RegistrosPorPagina = cantidadRegistros;
+                model.ConteoRecaudoList = await (from recaudo in recaudos
+                                                 select new ConteoRecaudoModel
+                                                 {
+                                                     Id = recaudo.Id,
+                                                     Estacion = recaudo.Estacion,
+                                                     Sentido = recaudo.Sentido,
+                                                     Hora = recaudo.Hora,
+                                                     Categoria = recaudo.Categoria,
+                                                     ValorTabulado = recaudo.ValorTabulado,
+                                                     Cantidad = recaudo.Cantidad,
+                                                     FechaRecaudo = recaudo.FechaRecaudo
+                                                 }).OrderBy(n => n.FechaRecaudo)
+                                                           .Skip((pagina - 1) * cantidadRegistros)
+                                                           .Take(cantidadRegistros)
+                                                           .ToListAsync(); ;
+
+                return model;
             }
             catch (Exception ex)
             {

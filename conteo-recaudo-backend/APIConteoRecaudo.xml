@@ -4,10 +4,11 @@
         <name>conteo-recaudo-backend</name>
     </assembly>
     <members>
-        <member name="M:ConteoRecaudo.Controllers.RecaudoController.Get">
+        <member name="M:ConteoRecaudo.Controllers.RecaudoController.Get(System.Int32)">
             <summary>
-             Obtiene el listado de recaudos
+             Obtiene el listado de recaudos por página
             </summary>
+            <param name="pagina">Página a consultar</param>
             <returns></returns>
             <response code="200">Operación finalizada exitosamente.</response>
             <response code="404">No encontró recaudos</response>

@@ -28,9 +28,12 @@ namespace ConteoRecaudo.BLL
             _configuracion = configuracion;
         }
 
-        public async Task<List<ConteoRecaudoModel>> GetRecaudos()
-             => await _recuadoRepository.GetRecaudos();
-
+        public async Task<ResponseReacudoModel> GetRecaudos(int pagina)
+        {
+            int registrosPorPagina = 100;
+            return await _recuadoRepository.GetRecaudos(pagina, registrosPorPagina);
+        }
+        
         public async Task<bool> GuardarRecaudos(string token, DateTime fechaIncio, DateTime fechaFin)
         {
             List<ConteoRecaudoModel> recaudos = new();
