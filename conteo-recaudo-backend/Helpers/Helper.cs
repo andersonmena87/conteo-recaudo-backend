@@ -4,30 +4,16 @@
     {
         public static bool FechasValidas(DateTime fechaInicial, DateTime fechaFinal)
         {
-            bool RangoValido = true;
-            
-            if (fechaInicial < fechaFinal)
+            bool rangoValido = true;
+            DateTime fechaMaxima = fechaInicial.AddMonths(1);
+
+            if (fechaInicial > fechaFinal || fechaMaxima < fechaFinal)
             {
-                RangoValido = false;
+                rangoValido = false;
             }
-            
-            return RangoValido;
+
+            return rangoValido;
         }
 
-        public static void CrearDirectorio(string RutaDirectorio)
-        {
-            if (!Directory.Exists(RutaDirectorio))
-            {
-                Directory.CreateDirectory(RutaDirectorio);
-            }
-        }
-
-        public static void EliminarDirectorio(string RutaDirectorio)
-        {
-            if (Directory.Exists(RutaDirectorio))
-            {
-                Directory.Delete(RutaDirectorio);
-            }
-        }
     }
 }

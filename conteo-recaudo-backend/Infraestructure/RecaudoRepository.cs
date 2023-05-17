@@ -1,9 +1,7 @@
-﻿using ConteoRecaudo.BLL;
-using ConteoRecaudo.DAL;
+﻿using ConteoRecaudo.DAL;
 using ConteoRecaudo.Entities;
 using ConteoRecaudo.Infraestructure.Interfaces;
 using ConteoRecaudo.Models;
-using DocumentFormat.OpenXml.InkML;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConteoRecaudo.Infraestructure

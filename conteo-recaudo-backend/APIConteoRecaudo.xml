@@ -62,6 +62,11 @@
               Busca una cadena traducida similar a No se pudo obtener el nombre para el archivo de configuración..
             </summary>
         </member>
+        <member name="P:ConteoRecaudo.Properties.Resources.ErrorRangoFechas">
+            <summary>
+              Busca una cadena traducida similar a El Rango de fechas es mayor a 30 días o fecha inicial mayor que la fecha final.
+            </summary>
+        </member>
         <member name="P:ConteoRecaudo.Properties.Resources.ErrorRutaTemporales">
             <summary>
               Busca una cadena traducida similar a No se logró obtener la ruta de archivo temporales en el config. Por favor valide el archivo de configuración..

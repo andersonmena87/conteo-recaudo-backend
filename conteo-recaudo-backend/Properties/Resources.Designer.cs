@@ -88,6 +88,15 @@ namespace ConteoRecaudo.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a El Rango de fechas es mayor a 30 días o fecha inicial mayor que la fecha final.
+        /// </summary>
+        internal static string ErrorRangoFechas {
+            get {
+                return ResourceManager.GetString("ErrorRangoFechas", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a No se logró obtener la ruta de archivo temporales en el config. Por favor valide el archivo de configuración..
         /// </summary>
         internal static string ErrorRutaTemporales {

@@ -1,5 +1,4 @@
-﻿using ClosedXML.Excel;
-using ConteoRecaudo.BLL.Interfaces;
+﻿using ConteoRecaudo.BLL.Interfaces;
 using ConteoRecaudo.Helpers;
 using ConteoRecaudo.Helpers.Converts;
 using ConteoRecaudo.Helpers.HttpExeptionHelper;
@@ -7,13 +6,10 @@ using ConteoRecaudo.Infraestructure.Interfaces;
 using ConteoRecaudo.Models;
 using ConteoRecaudo.Properties;
 using ConteoRecaudo.Services.Interfaces;
-using Newtonsoft.Json;
-using OfficeOpenXml.Style;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System.Data;
 using System.Numerics;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace ConteoRecaudo.BLL
 {
@@ -92,23 +88,6 @@ namespace ConteoRecaudo.BLL
             return listaUnida;
         }
 
-        private async Task<byte[]> ObtenerBytesArchivo(string Archivo)
-        {
-            byte[]? bytesArchivo = null;
-            if (File.Exists(Archivo))
-            {
-                bytesArchivo = await File.ReadAllBytesAsync(Archivo);
-                // File.Delete(Archivo);
-                Helper.CrearDirectorio(Path.GetDirectoryName(Archivo));
-            }
-            else
-            {
-                throw new HttpException(404, string.Format(Resources.ErrorArchivo, Archivo));
-            }
-
-            return bytesArchivo;
-        }
-
         public string ObtenerRutaArchivo(DateTime fechaInicial, DateTime fechaFinal)
         {
             string NombreArchivo;
@@ -129,6 +108,10 @@ namespace ConteoRecaudo.BLL
 
         public async Task<ArchivoRecaudoExcel> ExportarExcel(DateTime fechaInicial, DateTime fechaFinal)
         {
+            if (!Helper.FechasValidas(fechaInicial, fechaFinal)) {
+                throw new HttpException(500, Resources.ErrorRangoFechas);
+            }
+
             List<ReporteRecaudoExcel> recaudos = await _recuadoRepository.ObtenerRecaudosxFechas(fechaInicial, fechaFinal);
 
             DataTable dataTable = ConvertToDataTable(recaudos);
@@ -136,7 +119,7 @@ namespace ConteoRecaudo.BLL
             string nombreArchivo = ObtenerRutaArchivo(fechaInicial, fechaFinal);
             string nombreHoja = Path.GetFileNameWithoutExtension(nombreArchivo);
 
-            string archivo = Path.Combine(ObtenerRutaDirectorio(), nombreArchivo);
+            string archivo = Path.Combine(Path.GetTempPath(), nombreArchivo);
             
             if (File.Exists(archivo))
             {
@@ -175,8 +158,6 @@ namespace ConteoRecaudo.BLL
                     {
                         var cell = worksheet.Cells[rowIndex, columnIndex];
 
-
-                        // Formatear el campo "FechaRecaudo" como fecha
                         if (item is DateTime fechaRecaudo)
                         {
                             cell.Value = fechaRecaudo.ToShortDateString();
@@ -213,84 +194,56 @@ namespace ConteoRecaudo.BLL
 
                 foreach (DataColumn column in dataTable.Columns.Cast<DataColumn>().Skip(1))
                 {
-                    double sum = dataTable.AsEnumerable().Sum(row =>
-                    {
-                        if (row[column.ColumnName] is BigInteger bigInteger)
-                        {
-                            return (double)bigInteger;
-                        }
-                        return Convert.ToDouble(row[column.ColumnName]);
-                    });
-
                     var cell = worksheet.Cells[rowIndex, columnIndex];
-                    cell.Value = sum;
+                    cell.Formula = "SUM(" + GetExcelColumnLetter(columnIndex) + "2:" + GetExcelColumnLetter(columnIndex) + (rowIndex - 1) + ")";
                     cell.Style.Numberformat.Format = worksheet.Cells[2, columnIndex].Style.Numberformat.Format;
                     columnIndex++;
                 }
 
-                // Calcular y escribir las sumatorias
-                rowIndex+=2;
+                rowIndex += 2;
 
                 // Filas de totales
                 worksheet.Cells[rowIndex, 1].Value = "Totales";
                 worksheet.Cells[rowIndex, 1, rowIndex + 1, 1].Merge = true;
 
-                // Calcular y escribir las sumatorias
+                // Fila Totales: sumatoria de la fila total columnas pares
                 columnIndex = 2;
                 rowIndex++;
 
-                double sumColumn2 = 0;
-                for (int i = 1; i <= dataTable.Columns.Count - 1; i += 2)
+                string sumFormulaColumn = string.Empty;
+
+                for (int i = 2; i <= dataTable.Columns.Count - 1; i += 2)
                 {
-                    double sumColumn = 0;
-                    // Calcular la sumatoria de la columna
-                    foreach (DataRow row in dataTable.Rows)
-                    {
-                        if (row[i] is BigInteger bigInteger)
-                            sumColumn += (double)bigInteger;
-                    }
-                    sumColumn2 += sumColumn;
+                    string columnLetter = GetExcelColumnLetter(i);
+                    sumFormulaColumn += (sumFormulaColumn == string.Empty ? string.Empty : "+") + columnLetter + (rowIndex - 3);
                 }
 
                 var cellColumn2 = worksheet.Cells[rowIndex - 1, columnIndex];
-                cellColumn2.Value = sumColumn2;
+                cellColumn2.Formula = "SUM(" + sumFormulaColumn + ")";
                 cellColumn2.Style.Numberformat.Format = worksheet.Cells[2, columnIndex].Style.Numberformat.Format;
 
-                // Fila Totales: sumatoria de la fila total columnas 3, 5, 7
+
+                // Fila Totales: sumatoria de la fila total columnas impares
                 rowIndex++;
                 columnIndex = 2;
-                
 
-                double sumColumn3 = 0;
-                for (int i = 2; i <= dataTable.Columns.Count - 1; i += 2)
+                sumFormulaColumn = string.Empty;
+                for (int i = 3; i <= dataTable.Columns.Count; i += 2)
                 {
-                    double sumColumn = 0;
-                    // Calcular la sumatoria de la columna
-                    foreach (DataRow row in dataTable.Rows)
-                    {
-                        if (row[i] is BigInteger bigInteger)
-                            sumColumn += (double)bigInteger;
-                    }
-                    sumColumn3 += sumColumn;
+                    string columnLetter = GetExcelColumnLetter(i);
+                    sumFormulaColumn += (sumFormulaColumn == string.Empty ? string.Empty : "+") + columnLetter + (rowIndex - 4);
                 }
 
                 var cellColumn3 = worksheet.Cells[rowIndex - 1, columnIndex];
-                cellColumn3.Value = sumColumn3;
+                cellColumn3.Formula = "SUM(" + sumFormulaColumn + ")";
                 cellColumn3.Style.Numberformat.Format = "$#,##0";
-
-                // Establecer el formato de las celdas
-                worksheet.Cells.AutoFitColumns();
-                worksheet.Cells.Style.Font.Size = 11;
-                worksheet.Cells.Style.Font.Name = "Arial";
-                worksheet.Cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                worksheet.Cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
                 // Obtener el rango de la tabla
                 ExcelRange tableRange = worksheet.Cells[1, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column];
 
                 // Obtener las filas que contienen datos
                 IEnumerable<ExcelRangeBase> dataRows = tableRange
-                    .Where(cell => cell.Value != null && !string.IsNullOrWhiteSpace(cell.Value.ToString()))
+                    .Where(cell => !string.IsNullOrWhiteSpace(cell.Text) || !string.IsNullOrEmpty(cell.Formula))
                     .Select(cell => cell.Start.Row)
                     .Distinct()
                     .Select(row => worksheet.Cells[row, 1, row, worksheet.Dimension.End.Column]);
@@ -318,6 +271,14 @@ namespace ConteoRecaudo.BLL
                 rangeToRemoveBorders.Style.Border.Left.Style = ExcelBorderStyle.None;
                 rangeToRemoveBorders.Style.Border.Right.Style = ExcelBorderStyle.None;
 
+                // Establecer el formato de las celdas
+                worksheet.Cells.Style.Font.Size = 10;
+                worksheet.Cells.Style.Font.Name = "Arial";
+                worksheet.Cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                worksheet.Calculate();
+                worksheet.Cells.AutoFitColumns();
+
                 // Guardar el archivo Excel
                 package.Save();
             }
@@ -331,6 +292,22 @@ namespace ConteoRecaudo.BLL
 
             return descarga;
         }
+
+        private string GetExcelColumnLetter(int columnNumber)
+        {
+            int dividend = columnNumber;
+            string columnLetter = string.Empty;
+
+            while (dividend > 0)
+            {
+                int modulo = (dividend - 1) % 26;
+                columnLetter = Convert.ToChar('A' + modulo) + columnLetter;
+                dividend = (dividend - modulo) / 26;
+            }
+
+            return columnLetter;
+        }
+
 
         private DataTable ConvertToDataTable(List<ReporteRecaudoExcel> recaudos)
         {
@@ -362,14 +339,6 @@ namespace ConteoRecaudo.BLL
             }
 
             return dataTable;
-        }
-
-        private string ObtenerRutaDirectorio()
-        {
-            string rutaArchivos = "RutaArchivos";
-            string entorno = string.Format("{0}:{1}", "RutaArchivosTemporales", rutaArchivos);
-            string RutaTemporales = _configuracion.GetValue<string>(entorno);
-            return RutaTemporales;
         }
 
     }

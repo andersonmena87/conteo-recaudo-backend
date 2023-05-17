@@ -129,6 +129,10 @@
     <value>No se pudo obtener el nombre para el archivo de configuración.</value>
     <comment>Recurso para indicar que no se encontró la ruta parametrizada en el archivo de configuración.</comment>
   </data>
+  <data name="ErrorRangoFechas" xml:space="preserve">
+    <value>El Rango de fechas es mayor a 30 días o fecha inicial mayor que la fecha final</value>
+    <comment>Recurso para validación de fechas </comment>
+  </data>
   <data name="ErrorRutaTemporales" xml:space="preserve">
     <value>No se logró obtener la ruta de archivo temporales en el config. Por favor valide el archivo de configuración.</value>
     <comment>Recurso que se usa para indicar que no se encontró la ruta para dejar el archivo temporal. </comment>
